@@ -1,0 +1,10 @@
+env: "dev"
+
+server:
+  port: 8000
+  host: localhost
+  rw_timeout: 4s
+  idle_timeout: 60s
+
+api:
+  version: v1
