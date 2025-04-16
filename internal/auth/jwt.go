@@ -15,23 +15,23 @@ type CustomClaims struct {
 }
 
 func GenerateToken(userID int, email string) (string, error) {
+	secretKey := []byte(os.Getenv("SECRET_KEY"))
 	claims := CustomClaims{
 		UserID: userID,
 		Email:  email,
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour * 12)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour * 5)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			Issuer:    "doZen",
+			Issuer:    "x-vibe",
 		},
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenStr, err := token.SignedString(os.Getenv("SECRET_KEY"))
+	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
 		return "", err
 	}
-
-	return tokenStr, nil
+	return tokenString, nil
 }
 
 func ValidateToken(token string) (*CustomClaims, error) {

@@ -15,7 +15,7 @@ func LoadDatabase() *gorm.DB {
 	user := os.Getenv("DB_USER")
 	password := os.Getenv("DB_PWD")
 
-	dsn := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", user, password, dbname)
+	dsn := fmt.Sprintf("host=postgres user=%s password=%s dbname=%s port=5432 sslmode=disable", user, password, dbname)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("err with connecting to db: %v", err)
