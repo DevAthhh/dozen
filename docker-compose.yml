@@ -1,0 +1,40 @@
+version: '1.1'
+
+services:
+  postgres:
+    image: postgres
+    container_name: dozen_tmngr
+    environment: # very secret!
+      POSTGRES_USER: ath
+      POSTGRES_PASSWORD: 1111
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dozen_net
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ath"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  back:
+    image: sha256:96ef81ee89c66756ef74a06b4760c3a97711550f3446ec5e9f2ba9d20ef7cffc
+    container_name: dozen_backend
+    ports:
+      - "8000:8000"
+    networks:
+      - dozen_net
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    name: postgres_data
+
+networks:
+  dozen_net:
+    name: dozen_net
